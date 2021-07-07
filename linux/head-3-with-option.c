@@ -25,10 +25,10 @@ int main(int argc, char* argv[])
 				nlines = atol(optarg);
 				break;
 			case 'h':
-				fprintf(stdout, "Usage: %s [-n LINES] [FILE ...]\n", argv[0]);
+				fprintf(stdout, "(help)Usage: %s [-n LINES] [FILE ...]\n", argv[0]);
 				exit(0);
 			default:
-				fprintf(stderr, "Usage: %s [-n LINES] [FILE ...]\n", argv[0]);
+				fprintf(stderr, "(error)Usage: %s [-n LINES] [FILE ...]\n", argv[0]);
 				exit(1);
 		}
 	}
