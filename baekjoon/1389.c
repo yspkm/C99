@@ -8,7 +8,6 @@ int main(void)
 	int adj_mat[MAX_LEN + 1][MAX_LEN + 1] = {0};
 
 	scanf("%d %d", &n, &m);
-
 	for (i = 0; i < m; i++)
 	{
 		scanf("%d %d", &idx1, &idx2);
