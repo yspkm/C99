@@ -1,115 +1,61 @@
-#include <iostream>
+#include <stdio.h>
 
-#include <algorithm>
-
-const int INF = 987654321;
-
-const int MAX = 100 + 1;
-
- 
-
-int N, M;
-
-int graph[MAX][MAX];
-
- 
-
-//전형적인 플로이드 알고리즘
-
-void floyd(void)
-
-{
-
-        for (int k = 1; k <= N; k++)
-
-                 for (int i = 1; i <= N; i++)
-
-                         for (int j = 1; j <= N; j++)
-
-                                 if (i == j)
-
-                                          continue;
-
-                                 else if (graph[i][k] && graph[k][j])
-
-                                 {
-
-                                          if (graph[i][j] == 0)
-
-                                                  graph[i][j] = graph[i][k] + graph[k][j];
-
-                                          //베이컨의 수가 적어야하므로
-
-                                          else
-
-                                                  graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
-
-                                 }
-
-}
-
- 
+#define MAX_LEN 100
 
 int main(void)
-
 {
+	int n, m, i, idx1, idx2, idx3, len = 0x7fffffff, ans, temp, temp_len = 0;
+	int adj_mat[MAX_LEN + 1][MAX_LEN + 1] = {0};
 
-        cin >> N >> M;
+	scanf("%d %d", &n, &m);
 
- 
+	for (i = 0; i < m; i++)
+	{
+		scanf("%d %d", &idx1, &idx2);
+		adj_mat[idx1][idx2] = 1;
+		adj_mat[idx2][idx1] = 1;
+	}
 
-        for (int i = 0; i < M; i++)
+	for (idx1 = 1; idx1 <= n; idx1++)
+	{
+		for (idx2 = 1; idx2 <= n; idx2++)
+		{
+			for (idx3 = 1; idx3 <= n; idx3++)
+			{
+				if (idx1 == idx2)
+				{
+					continue;
+				}
+				if (adj_mat[idx1][idx3] > 0 && adj_mat[idx2][idx1] > 0)
+				{
+					temp = adj_mat[idx1][idx3] + adj_mat[idx2][idx1];
+					if (!adj_mat[idx2][idx3])
+					{
+						adj_mat[idx2][idx3] = temp;
+					}
+					else
+					{
+						adj_mat[idx2][idx3] = adj_mat[idx2][idx3] < temp ? adj_mat[idx2][idx3] : temp;
+					}
+				}
+			}
+		}
+	}
 
-        {
+	for (idx1 = 1; idx1 <= n; idx1++)
+	{
+		temp_len = 0;
+		for (idx2 = 1; idx2 <= n; idx2++)
+		{
+			temp_len += adj_mat[idx1][idx2];
+		}
+		if (temp_len < len)
+		{
+			len = temp_len;
+			ans = idx1;
+		}
+	}
+	printf("%d\n", ans);
 
-                 int node1, node2;
-
-                 cin >> node1 >> node2;
-
- 
-
-                 graph[node1][node2] = graph[node2][node1] = 1;
-
-        }
-
- 
-
-        floyd();
-
- 
-
-        int result = INF;
-
-        int person;
-
-        for (int i = 1; i <= N; i++)
-
-        {
-
-                 int sum = 0;
-
-                 for (int j = 1; j <= N; j++)
-
-                         sum += graph[i][j];
-
-                 if (result > sum) //최소 베이컨 수일 때
-
-                 {
-
-                         result = sum;
-
-                         person = i; //해당 사람을 저장
-
-                 }
-
-        }
-
- 
-
-        cout << person << endl;
-
-        return 0;
-
+	return 0;
 }
-
-
