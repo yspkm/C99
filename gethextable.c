@@ -1,25 +1,15 @@
 #include <stdio.h>
 
-void printHorLine(FILE* file, int row, char* hex, char* hor)
-{
-	for (int i = 0; i < 67; i++) {
-		fprintf(file, "%s", hor);
-	}
-
-	if (row >= 0 && row < 16) {
-		fprintf(file, "\n%c*", hex[row]);
-		fprintf(file, " ");
-	} else {
-		fprintf(file, "\n");
-	}
-}
+void printHorLine(FILE* file, int row, char* hex, char* hor);
 
 int main(void) 
 {
-	int row = 0;
-	int j = 0, jj=0;	
-	char *hex = "0123456789ABCDEF";
-	FILE* file = fopen("hextable.txt", "w");
+	int j = 0, row=0;	
+	char *hex = NULL;
+	FILE* file = NULL;
+
+	hex = "0123456789ABCDEF";
+	file = fopen("hextable.txt", "w");
 
 	fprintf(file, "<BIN-HEX-DEC QUICK REFERENCE TABLE>\n");
 
@@ -40,6 +30,7 @@ int main(void)
 			fprintf(file, "\n");
 			j = 0;
 			row++;
+
 			if (i < 255) {
 				printHorLine(file, row, hex, "-");
 			} 
@@ -47,4 +38,13 @@ int main(void)
 	}
 
 	return 0;
+}
+
+void printHorLine(FILE* file, int row, char* hex, char* hor)
+{
+	for (int i = 0; i < 67; i++) {
+		fprintf(file, "%s", hor);
+	}
+	fprintf(file, "\n%c*", hex[row]);
+	fprintf(file, " ");
 }
