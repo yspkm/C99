@@ -63,10 +63,9 @@ int main(void)
 	}
 	fprintf(file, "\n");
 	printHorTwoLine(0);
-	//printHorLine(0);
 	for (int i = 0; i < 256; i++) {
-		char u = hex[i % 0x10];
-		char l = hex[(i / 0x10) % 0x10];
+		char l = hex[i % 0x10];
+		char u = hex[(i / 0x10) % 0x10];
 
 		fprintf(file, "|%c%c(%03d)", u, l, i);
 		j++;	
