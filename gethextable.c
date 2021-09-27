@@ -1,48 +1,16 @@
 #include <stdio.h>
 
-char hex[] = "0123456789ABCDEF";
-unsigned char byte[8+1]; 
-FILE* file = NULL;
-
-void getByte(unsigned char byte[], int num)
+void printHorLine(FILE* file, int row, char* hex, char* hor)
 {
-	for (int i = 7; i >= 0; i--) {
-		byte[i] = num % 0x2 + '0'; 
-		num /= 0x2;
-	}
-	byte[8] = '\0';
-}
-
-void printHorLine(int row)
-{
-	for (int i = 0; i < 137; i++) {
-		fprintf(file, "-");
+	for (int i = 0; i < 67; i++) {
+		fprintf(file, "%s", hor);
 	}
 
 	if (row >= 0 && row < 16) {
-		fprintf(file, "\n%c(", hex[row]);
-		getByte(byte, row);
-		for(int i = 4; i < 8; i++) {
-			fprintf(file, "%c", byte[i]);
-		}
-		fprintf(file, ")| ");
+		fprintf(file, "\n%c*", hex[row]);
+		fprintf(file, " ");
 	} else {
 		fprintf(file, "\n");
-	}
-}
-
-void printHorTwoLine(int row)
-{
-	for (int i = 0; i < 137; i++) {
-		fprintf(file, "=");
-	}
-	if (row >= 0 && row < 16) {
-		fprintf(file, "\n%c(", hex[row]);
-		getByte(byte, row);
-		for(int i = 4; i < 8; i++) {
-			fprintf(file, "%c", byte[i]);
-		}
-		fprintf(file, ")| ");
 	}
 }
 
@@ -50,33 +18,33 @@ int main(void)
 {
 	int row = 0;
 	int j = 0, jj=0;	
-	file = fopen("hextable.txt", "w");
+	char *hex = "0123456789ABCDEF";
+	FILE* file = fopen("hextable.txt", "w");
 
-	fprintf(file, "         ");
+	fprintf(file, "<BIN-HEX-DEC QUICK REFERENCE TABLE>\n");
+
+	fprintf(file, "(b:h:d) 1010:A:10|1011:B:11|1100:C:12");
+	fprintf(file, "|1101:D:13|1110:E:14|1111:F:15\n");
+
+	fprintf(file, "   ");
 	for (int i = 0; i < 16; i++) {
-		getByte(byte, i);
-		fprintf(file, "|%c(", hex[i]);
-		for (int j = 4; j < 8; j++) {
-			fprintf(file, "%c", byte[j]);
-		}
-		fprintf(file, ")");
+		fprintf(file, "| *%c", hex[i]);
 	}
 	fprintf(file, "\n");
-	printHorTwoLine(0);
-	for (int i = 0; i < 256; i++) {
-		char l = hex[i % 0x10];
-		char u = hex[(i / 0x10) % 0x10];
 
-		fprintf(file, "|%c%c(%03d)", u, l, i);
+	printHorLine(file, 0, hex, "=");
+	for (int i = 0; i < 256; i++) {
+		fprintf(file, "|%03d", i);
 		j++;	
 		if (j == 16) {
 			fprintf(file, "\n");
 			j = 0;
 			row++;
-			printHorLine(row);
+			if (i < 255) {
+				printHorLine(file, row, hex, "-");
+			} 
 		}
 	}
-	fprintf(file, "\n");
 
 	return 0;
 }
