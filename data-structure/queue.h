@@ -1,17 +1,24 @@
+#ifndef QUEUE_H
+#define QUEUE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
 #include <stdbool.h>
-#define MAX_QUEUE	100
 
-typedef int DATA_TYPE;
-
-typedef struct queue_t{
-	int front, rear;
-	DATA_TYPE items[MAX_QUEUE];
+typedef void* data_t;
+typedef struct _queue_s{
+	data_t* items;
+	int max_queue;
+	int front;
+	int rear;
 }queue_t;
 
-void init_queue(queue_t*);	// Make a queue empty.
-bool is_full(queue_t*);	// Check wheter a queue is full.
-bool is_empty(queue_t*);	// Check wheter a queue is empty.
+void initQueue(queue_t* q); // Make a queue empty.
+bool isFullQueue(queue_t* q); // Check wheter a queue is full.
+bool isEmptyQueue(queue_t* q); // Check wheter a queue is empty.
 
-DATA_TYPE peek(queue_t*);	// Read the item at the front. This function will be called only if the queue is not empty.
-void enqueue(queue_t*, DATA_TYPE);	// Insert an item at the rear.
-void dequeue(queue_t*);		// Delete an item at the front
+void pushQueue(queue_t* q, data_t item); // Insert an item at the rear.
+data_t popQueue(queue_t* q); // Read and Delete an item at the front
+
+#endif
