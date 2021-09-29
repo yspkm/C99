@@ -1,59 +1,45 @@
 #include "stack.h"
-#include <stdio.h>
 
 // Make stack empty.
-void InitStack(Stack* pstack)
+void initStack(stack_t* s)
 {
-	pstack->top = -1;
+	s->top = -1;
+	s->items = (data_t*) malloc(sizeof(data_t));
+	s->max_stack = 1;
 }
+
 // Check whether stack is full.
-bool IsFull(Stack* pstack)
+bool isFullStack(stack_t* s)
 {
-    return pstack->top == MAX_STACK - 1;
+    return s->top == s->max_stack - 1;
 }
+
 // check whether stack is empty.
-bool IsEmpty(Stack* pstack)
+bool isEmptyStack(stack_t* s)
 {
-	return pstack->top == -1;
+	return s->top == -1;
 }
-// Read the item(node) at the top.
-BTreeNode* PeekNode(Stack* pstack)
-{
-	if (IsEmpty(pstack))
-		return NULL;
 
-	return pstack->items[pstack->top].node;
-}
-// Read the item(DATA_TYPE) at the top.
-DATA_TYPE PeekData(Stack* pstack)
-{
-	if (IsEmpty(pstack))
-		return '\0';
-
-	return pstack->items[pstack->top].data;
-}
 // Insert an item(node) at the top.
-void PushNode(Stack* pstack, BTreeNode* node)
+void pushStack(stack_t* s, data_t item)
 {
-	if (IsFull(pstack))
-		return;
+	if (isFullStack(s)) {
+		data_t* tmp_items = (data_t*) malloc(2 * s->max_stack * sizeof(data_t));
+		memcpy(tmp_items, s->items, s->max_stack * sizeof(data_t));
+		free(s->items);
+		s->items = tmp_items;
+		s->max_stack *= 2;
+	}
 
-	pstack->items[++(pstack->top)].node = node;
-}
-// Insert an item(DATA_TYPE) at the top.
-void PushData(Stack* pstack, DATA_TYPE item)
-{
-	if (IsFull(pstack))
-		return;
-
-	pstack->items[++(pstack->top)].data = item;
+	s->items[++(s->top)] = item;
 }
 
 // Remove the item at the top.
-void Pop(Stack* pstack)
+data_t popStack(stack_t* s)
 {
-	if (IsEmpty(pstack))
-		return;
-
-	--(pstack->top);
+	if (isEmptyStack(s)) {
+		printf("error: empty stack\n");
+		return NULL;
+	}
+	return s->items[(s->top)--];
 }
